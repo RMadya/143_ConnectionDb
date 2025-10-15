@@ -24,6 +24,25 @@ app.get('/mahasiswa', (req, res) => {
 });
 
 
+// POST /mahasiswa - create new mahasiswa
+app.post('/mahasiswa', (req, res) => {
+    const { nama, alamat, agama } = req.body;
+    // basic validation
+    if (!nama || !alamat || !agama) {
+        return res.status(400).json({ error: 'nama, alamat, and agama are required' });
+    }
+
+    const sql = 'INSERT INTO biodata (nama, alamat, agama) VALUES (?, ?, ?)';
+    db.query(sql, [nama, alamat, agama], (err, result) => {
+        if (err) {
+            console.error('DB error on INSERT:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        // return the created resource id and data
+        res.status(201).json({ id: result.insertId, nama, alamat, agama });
+    });
+});
+
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
