@@ -11,6 +11,18 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 })
 
+// GET /mahasiswa - return all mahasiswa
+app.get('/mahasiswa', (req, res) => {
+    const sql = 'SELECT * FROM biodata';
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('DB error on SELECT:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.json(results);
+    });
+});
+
 
 const db = mysql.createConnection({
     host: 'localhost',
